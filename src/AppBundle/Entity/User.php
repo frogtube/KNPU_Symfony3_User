@@ -3,12 +3,16 @@
 namespace AppBundle\Entity;
 
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @UniqueEntity(fields={"email"}, message="Looks like you already have an account")
  */
 class User implements UserInterface
 {
@@ -18,8 +22,11 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
     /**
      * @ORM\Column(type="string", unique=true)
+     * @Assert\Email()
+     * @Assert\NotBlank()
      */
     private $email;
 
@@ -28,6 +35,9 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @Assert\NotBlank(groups={"Registration"})
+     */
     private $plainPassword;
 
     /**
